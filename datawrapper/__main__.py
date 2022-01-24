@@ -173,18 +173,21 @@ class Datawrapper:
             )
 
         if new_chart_response.status_code <= 201:
+            print(new_chart_response.status_code)
+            print(new_chart_response.text)
             chart_info = new_chart_response.json()
             print(f"New chart {chart_info['type']} created!")
+            if data is not None:
+                self.add_data(chart_id=chart_info["id"], data=data)
+            return chart_info
+
         else:
             print(
                 f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
             )
+            return None
 
-        if data is not None:
-            self.add_data(chart_id=chart_info["id"], data=data)
-
-        return chart_info
-
+        
     def update_description(
         self,
         chart_id: str,
